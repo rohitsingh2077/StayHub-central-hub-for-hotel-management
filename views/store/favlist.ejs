@@ -145,7 +145,11 @@
       <p>Here are our favourites homes:</p>
       <div class="home-cards">
         <% if(regHome && regHome.length > 0){%>
-          <pre><%= JSON.stringify(regHome, null, 10) %></pre>
+        <pre><%= JSON.stringify(regHome, null, 10) %></pre>
+
+
+
+        
         <% regHome.forEach(home => { %>
         <!-- <!-- <div class="card">
           <img

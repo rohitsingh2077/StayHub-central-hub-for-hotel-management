@@ -4,31 +4,51 @@ exports.getaddHome = (req, res, next) => {
   console.log(`home req sent`);
   res.render("host/edit-home", {
     editing: false,
+    isloggedin: req.isloggedin
   });
 };
 
 exports.postAddHome = (req, res, next) => {
-  const { HouseName, HouseNumber, Price, location, rating, description, HousePhoto } = req.body;
+  const {
+    HouseName,
+    HouseNumber,
+    Price,
+    location,
+    rating,
+    description,
+    HousePhoto,
+  } = req.body;
   const db = getDB();
 
   // Check if HouseNumber already exists in MongoDB
-  db.collection('homes').findOne({ HouseNumber: HouseNumber })
-    .then(existing => {
+  db.collection("homes")
+    .findOne({ HouseNumber: HouseNumber })
+    .then((existing) => {
       if (existing) {
-        return res.send('HouseNumber already exists!');
+        return res.send("HouseNumber already exists!");
       }
 
-      const home = new Home(HouseName, HouseNumber, Price, location, rating, description, null);
-      home.save().then(()=>{
+      const home = new Home(
+        HouseName,
+        HouseNumber,
+        Price,
+        location,
+        rating,
+        description,
+        null
+      );
+      home.save().then(() => {
         console.log(`home saved successfully`);
-      })
+      });
     })
     .then(() => {
-      res.render('host/Homeadded');
+      res.render("host/Homeadded", {
+        isloggedin: req.isloggedin
+      });
     })
-    .catch(err => {
-      console.error('Error in postAddHome:', err);
-      res.status(500).send('Server error');
+    .catch((err) => {
+      console.error("Error in postAddHome:", err);
+      res.status(500).send("Server error");
     });
 };
 
@@ -45,25 +65,38 @@ exports.postviewHome = (req, res, next) => {
       } else {
         console.log(`Home not found`);
       }
-      res.render("store/viewHome", { regHome });
+      res.render("store/viewHome", {
+        regHome: regHome,
+        isloggedin: req.isloggedin
+      });
     })
-    .catch(err => {
-      console.error('Error in postviewHome:', err);
-      res.status(500).send('Server error');
+    .catch((err) => {
+      console.error("Error in postviewHome:", err);
+      res.status(500).send("Server error");
     });
 };
 
 exports.viewHostHome = (req, res, next) => {
   //returns a promise
   Home.fetchAll()
-    .then((regHome) => res.render("host/host-home-list", { regHome }))
-    .catch(err => res.status(500).send('Server error'));
+    .then((regHome) =>
+      res.render("host/host-home-list", {
+        regHome: regHome,
+        isloggedin: req.isloggedin
+      })
+    )
+    .catch((err) => res.status(500).send("Server error"));
 };
 
 exports.getHostHomes = (req, res, next) => {
   Home.fetchAll()
-    .then((regHome) => res.render("host/host-home-list", { regHome }))
-    .catch(err => res.status(500).send('Server error'));
+    .then((regHome) =>
+      res.render("host/host-home-list", {
+        regHome: regHome,
+        isloggedin: req.isloggedin
+      })
+    )
+    .catch((err) => res.status(500).send("Server error"));
 };
 
 exports.getEditHome = (req, res, next) => {
@@ -78,38 +111,49 @@ exports.getEditHome = (req, res, next) => {
         console.log(`home not found `);
         return res.redirect("/host/hosthomes");
       }
-      console.log('Found home for edit:', home);
+      console.log("Found home for edit:", home);
       res.render("host/edit-home", {
         editing: true,
         home: home,
+        isloggedin: req.isloggedin,
       });
     })
-    .catch(err => {
-      console.error('Error fetching home by id:', err);
+    .catch((err) => {
+      console.error("Error fetching home by id:", err);
       return res.redirect("/host/hosthomes");
     });
 };
 
 // handle edit form submission
 exports.postEditHome = (req, res, next) => {
-  const {_id, HouseName, HouseNumber, Price, rating, location, description } = req.body;
+  const { _id, HouseName, HouseNumber, Price, rating, location, description } =
+    req.body;
   console.log(`id: ${_id}`);
-  const updatedData = new Home( HouseName, HouseNumber, Price, rating, location, description,_id );
-  
+  const updatedData = new Home(
+    HouseName,
+    HouseNumber,
+    Price,
+    rating,
+    location,
+    description,
+    _id
+  );
+
   console.log("this is the updated data", updatedData);
-  updatedData.save().then(result =>{
+  updatedData.save().then((result) => {
     console.log(`hello`);
-  })
+  });
   res.redirect("/host/hosthomes");
 };
 
 exports.postDeleteHome = (req, res, next) => {
   const homeId = req.params.homeId;
   console.log(`came to delete `, homeId);
-  Home.deleteById(homeId).then(()=>{
-    res.redirect("/host/hosthomelist");
-  })
-  .catch(()=>{
-    res.redirect("/host/hosthomelist");
-  });
+  Home.deleteById(homeId)
+    .then(() => {
+      res.redirect("/host/hosthomelist");
+    })
+    .catch(() => {
+      res.redirect("/host/hosthomelist");
+    });
 };

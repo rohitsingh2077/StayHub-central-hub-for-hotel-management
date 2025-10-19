@@ -1,13 +1,13 @@
 <div id="navbar" style="
     display: flex;
     gap: 2rem;
-    background: linear-gradient(90deg, #4CAF50, #2E7D32);
+    background: linear-gradient(90deg, #0bb011, #20e029);
     color: white;
     width: 100%;
     height: 60px;
     align-items: center;
     padding: 0 20px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 12px rgba(176, 143, 143, 0.1);
     position: sticky;
     top: 0;
     z-index: 100;
@@ -21,7 +21,7 @@
       border-radius: 8px;
       transition: all 0.3s ease;
   ">Home</a>
-  
+  <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
   <a href="/host/add-home" style="
       text-decoration: none;
       color: white;
@@ -31,7 +31,8 @@
       border-radius: 8px;
       transition: all 0.3s ease;
   ">Add Home</a>
-  
+    <% } %>
+  <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
   <a href="/viewhome" style="
       text-decoration: none;
       color: white;
@@ -41,7 +42,8 @@
       border-radius: 8px;
       transition: all 0.3s ease;
   ">View Home</a>
-  
+  <%}%>
+    <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
   <a href="/bookings" style="
       text-decoration: none;
       color: white;
@@ -51,6 +53,8 @@
       border-radius: 8px;
       transition: all 0.3s ease;
   ">Bookings</a>
+    <% } %>
+    <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
   <a href="/favourites" style="
       text-decoration: none;
       color: white;
@@ -60,6 +64,8 @@
       border-radius: 8px;
       transition: all 0.3s ease;
   ">Favourites</a>
+  <%}%>
+    <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
   <a href="/host/hosthomes" style="
       text-decoration: none;
       color: white;
@@ -69,4 +75,32 @@
       border-radius: 8px;
       transition: all 0.3s ease;
   ">Host Homes</a>
+    <% } %>
+    <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
+    <a href="/logout" style="
+            text-decoration: none;
+            color: white;
+            background: linear-gradient(90deg, #98d21c, #bfda25);
+            font-weight: 500;
+            font-size: 1rem;
+            padding: 8px 12px;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            position: absolute;
+            right: 1rem;
+    ">Log out</a>
+    <% } else { %>
+    <a href="/login" style="
+      text-decoration: none;
+      color: white;
+      background: linear-gradient(90deg, #98d21c, #bfda25);
+      font-weight: 500;
+      font-size: 1rem;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      position: absolute;
+      right: 1rem;
+  ">Log in</a>
+    <% } %>
 </div>

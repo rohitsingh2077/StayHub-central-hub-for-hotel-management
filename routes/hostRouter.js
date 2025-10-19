@@ -11,7 +11,6 @@ hostRouter.get("/edit-home/:homeId" , hostController.getEditHome);
 hostRouter.post("/edit-home", hostController.postEditHome);
 hostRouter.post("/delete-home/:homeId",hostController.postDeleteHome);
 
-
 exports.hostRouter = hostRouter; // object banake export kar raha hoo so have to destructure it on recieving
 
 /*
