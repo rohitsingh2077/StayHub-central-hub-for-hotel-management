@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Just Home</title>
+    <style>
+      /* Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f4f7fb;
+        color: #333;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* Navbar */
+      #navbar {
+        display: flex;
+        justify-content: flex-start;
+        gap: 2rem;
+        background: linear-gradient(90deg, #4caf50, #2e7d32);
+        color: white;
+        width: 100%;
+        height: 56px;
+        align-items: center;
+        padding: 0 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+
+      #navbar a {
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        transition: color 0.3s ease, transform 0.2s ease;
+      }
+
+      #navbar a:hover {
+        color: #ffeb3b;
+        transform: translateY(-2px);
+      }
+
+      /* Main Content */
+      #content {
+        max-width: 1000px;
+        margin: 2rem auto;
+        padding: 1rem 2rem;
+      }
+
+      #content p {
+        font-size: 1.4rem;
+        font-weight: bold;
+        margin-bottom: 1.5rem;
+        color: #444;
+        text-align: center;
+      }
+
+      /* Cards Container */
+      .home-cards {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: center;
+      }
+
+      .card {
+        background: #fff;
+        border-radius: 16px;
+        padding: 20px;
+        width: 260px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+      }
+
+      .card img {
+        width: 100%;
+        height: auto;
+        border-radius: 10px;
+        margin-bottom: 10px;
+      }
+
+      .card h3 {
+        margin-bottom: 10px;
+        color: #2e7d32;
+      }
+
+      .card p {
+        margin: 6px 0;
+        color: #555;
+      }
+
+      .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        #navbar {
+          flex-direction: column;
+          height: auto;
+          padding: 10px;
+        }
+
+        .home-cards {
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .card {
+          width: 90%;
+        }
+      }
+      .book-btn {
+        padding: 0px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(90deg, #4caf50, #2e7d32);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .book-btn:hover {
+        background: linear-gradient(90deg, #43a047, #1b5e20);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/navbar') %>
+
+    <div id="content">
+      <p>Here are our registered homes:</p>
+      <% if(regHome && regHome.length >0) {%>
+      <!-- <pre><%= JSON.stringify(regHome, null, 2) %></pre> -->
+      <div class="home-cards">
+        <% regHome.forEach(home => { %>
+        <div class="card">
+          <img src="<%= home.photoUrl %>" alt="Image of <%= home.HouseName %>">
+          <h3><%= home.HouseName %> (#<%= home.HouseNumber %>)</h3>
+          <p><strong>Price:</strong> INR<%= home.Price %></p>
+          <p><strong>Rating:</strong> <%= home.rating %>/5</p>
+          <p><strong>Location:</strong> <%= home.location %></p>
+          <a href="/viewhome/<%= home._id.toString() %>" class="book-btn">Details</a>
+          <%- include('../partials/favourite', { home: home }) %>
+        </div>
+        <% }) %>
+      </div>
+      <%}%>
+    </div>
+  </body>
+</html>

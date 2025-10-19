@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Success</title>
+  <style>
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f4f7fb;
+      color: #333;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+
+    /* Navbar */
+    #navbar {
+      display: flex;
+      gap: 2rem;
+      background: linear-gradient(90deg, #4CAF50, #2E7D32);
+      color: white;
+      width: 100%;
+      height: 56px;
+      align-items: center;
+      padding: 0 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      position: sticky;
+      top: 0;
+    }
+
+    #navbar a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    #navbar a:hover {
+      color: #ffeb3b;
+      transform: translateY(-2px);
+    }
+
+    /* Success container */
+    .container {
+      text-align: center;
+      background: white;
+      padding: 2rem 3rem;
+      border-radius: 16px;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      max-width: 500px;
+      margin: auto;
+      margin-top: 3rem;
+      animation: fadeIn 0.8s ease-in-out;
+    }
+
+    h1 {
+      color: #2E7D32;
+      margin-bottom: 0.5rem;
+    }
+
+    h2 {
+      font-weight: normal;
+      color: #444;
+      margin-bottom: 1.5rem;
+    }
+
+    .checkmark {
+      font-size: 3rem;
+      color: #4CAF50;
+      margin-bottom: 1rem;
+      display: inline-block;
+    }
+
+    .btn {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: 12px 20px;
+      background: linear-gradient(90deg, #4CAF50, #2E7D32);
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .btn:hover {
+      background: linear-gradient(90deg, #43A047, #1B5E20);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header/Navbar -->
+  <%- include('../partials/navbar') %>
+  <!-- Success Content -->
+  <div class="container">
+    <div class="checkmark">✔</div>
+    <h1>Success!</h1>
+    <h2>Home registered successfully</h2>
+    <a href="/" class="btn">Go to Home</a>
+  </div>
+</body>
+</html>

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FckHome</title>
+  <style>
+    /* Reset */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: "Segoe UI", sans-serif;
+      background: #f4f7fb;
+      color: #333;
+      line-height: 1.6;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Navbar */
+    #navbar {
+      display: flex;
+      justify-content: flex-start;
+      gap: 2rem;
+      background: linear-gradient(90deg, #4CAF50, #2E7D32);
+      color: white;
+      width: 100%;
+      height: 56px;
+      align-items: center;
+      padding: 0 20px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    #navbar a {
+      text-decoration: none;
+      color: white;
+      font-weight: 500;
+      transition: color 0.3s ease, transform 0.2s ease;
+    }
+
+    #navbar a:hover {
+      color: #ffeb3b;
+      transform: translateY(-2px);
+    }
+
+    /* Hero Section */
+    #hero {
+      background: url('/assets/hero-bg.jpg') center/cover no-repeat;
+      color: white;
+      text-align: center;
+      padding: 4rem 2rem;
+      background-color: #2E7D32; /* fallback if image missing */
+    }
+
+    #hero h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    #hero p {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* About Section */
+    #about {
+      max-width: 1000px;
+      margin: 2rem auto;
+      padding: 2rem;
+      text-align: center;
+    }
+
+    #about h2 {
+      margin-bottom: 1rem;
+      color: #2E7D32;
+    }
+
+    #about p {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+      color: #555;
+    }
+
+    /* Footer */
+    footer {
+      margin-top: auto;
+      background: #2E7D32;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+    }
+  </style>
+</head>
+<body>
+  <%- include('../partials/navbar') %>
+
+  <!-- Hero Section -->
+  <section id="hero">
+    <h1>Welcome to FckHome</h1>
+    <p>Where comfort meets affordability. Explore homes that fit your lifestyle, curated with care.</p>
+  </section>
+
+  <!-- About Section -->
+  <section id="about">
+    <h2>About Us</h2>
+    <p><strong>FckHome</strong> is a project proudly created by <strong>Rohit Singh</strong>.</p>
+    <p>Our mission is simple: to provide an easy way to find and showcase homes that people can truly call their own. Whether you're buying, renting, or just exploring, we make the experience smooth and enjoyable.</p>
+    <p>Started as a personal initiative, <strong>FckHome</strong> blends technology, design, and reliability into one platform that connects people with their dream spaces.</p>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <p>© <%= new Date().getFullYear() %> FckHome | Built with ❤️ by Rohit Singh</p>
+    <p>Contact: support@justhome.com</p>
+  </footer>
+</body>
+</html>

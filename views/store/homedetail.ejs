@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home Details</title>
+    <style>
+      /* Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f4f7fb;
+        color: #333;
+        line-height: 1.6;
+        min-height: 100vh;
+      }
+
+      /* Wrapper */
+      .home-detail-wrapper {
+        max-width: 900px;
+        margin: 2rem auto;
+        padding: 20px;
+      }
+
+      /* Card Layout */
+      .home-card {
+        display: flex;
+        gap: 20px;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.3s ease;
+      }
+
+      .home-card:hover {
+        transform: translateY(-5px);
+      }
+
+      /* Image Section */
+      .home-card img {
+        width: 40%;
+        height: auto;
+        object-fit: cover;
+      }
+
+      /* Content Section */
+      .home-info {
+        flex: 1;
+        padding: 20px;
+      }
+
+      .home-info h2 {
+        color: #2e7d32;
+        margin-bottom: 12px;
+      }
+
+      .home-info p {
+        margin: 6px 0;
+        color: #555;
+        font-size: 1rem;
+      }
+
+      .price {
+        font-size: 1.2rem;
+        font-weight: bold;
+        color: #1b5e20;
+      }
+
+      .rating {
+        font-weight: bold;
+        color: #ff9800;
+      }
+
+      /* Book Button */
+      .book-btn {
+        margin-top: 16px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        font-weight: bold;
+        color: white;
+        background: linear-gradient(90deg, #4caf50, #2e7d32);
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .book-btn:hover {
+        background: linear-gradient(90deg, #43a047, #1b5e20);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        .home-card {
+          flex-direction: column;
+        }
+
+        .home-card img {
+          width: 100%;
+          height: 250px;
+        }
+      }
+      #buttons{
+        display: flex;
+        flex-direction: row;
+        justify-content: start;
+        align-items: center;
+        gap: 1rem;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/navbar') %>
+
+    <div class="home-detail-wrapper">
+      <div class="home-card">
+        <!-- Image -->
+        <img src="<%- home.photoUrl %>" alt="Home Image" />
+
+        <!-- Info -->
+        <div class="home-info">
+          <h2><%- home.HouseName%></h2>
+          <p><span class="price">₹ <%- home.Price%>/month</span></p>
+          <p>📍 Location: <%- home.location%></p>
+          <p>🏠 House Number: <%- home.HouseNumber%></p>
+          <p class="rating">⭐ Rating: <%- home.rating%></p>
+          <p><%- home.description%></p>
+          <div id="buttons">
+            <%- include('../partials/favourite')%>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

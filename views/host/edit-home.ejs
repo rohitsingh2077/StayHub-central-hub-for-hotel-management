@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Enroll Home</title>
+    <style>
+      /* Reset */
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Segoe UI", sans-serif;
+        background: #f4f7fb;
+        color: #333;
+        line-height: 1.6;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      /* Navbar */
+      #navbar {
+        display: flex;
+        gap: 2rem;
+        background: linear-gradient(90deg, #4caf50, #2e7d32);
+        color: white;
+        width: 100%;
+        height: 56px;
+        align-items: center;
+        padding: 0 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+        position: sticky;
+        top: 0;
+      }
+      #navbar a {
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        transition: color 0.3s ease, transform 0.2s ease;
+      }
+
+      #navbar a:hover {
+        color: #ffeb3b;
+        transform: translateY(-2px);
+      }
+
+      /* Container */
+      .container {
+        max-width: 600px;
+        margin: 3rem auto;
+        padding: 2rem;
+        background: white;
+        border-radius: 16px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        text-align: center;
+      }
+
+      h1 {
+        margin-bottom: 1.5rem;
+        font-size: 1.8rem;
+        color: #2e7d32;
+      }
+
+      /* Form Styling */
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 1.2rem;
+      }
+
+      input[type="text"],
+      input[type="number"] {
+        padding: 12px 14px;
+        border: 1px solid #ccc;
+        border-radius: 10px;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+      }
+
+      input[type="text"]:focus,
+      input[type="number"]:focus {
+        border-color: #4caf50;
+        outline: none;
+        box-shadow: 0 0 6px rgba(76, 175, 80, 0.4);
+      }
+
+      input[type="submit"] {
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(90deg, #4caf50, #2e7d32);
+        color: white;
+        font-size: 1rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+        background: linear-gradient(90deg, #43a047, #1b5e20);
+        transform: translateY(-2px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Responsive */
+      @media (max-width: 600px) {
+        .container {
+          margin: 1rem;
+          padding: 1.5rem;
+        }
+
+        h1 {
+          font-size: 1.4rem;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <%- include('../partials/navbar') %>
+
+    <!-- Form Container -->
+    <div class="container">
+      <h1><%= editing ? "Edit" : "Register" %> your home</h1>
+      <form
+        action="<%= editing ? '/host/edit-home' : '/host/add-home' %>"
+        method="POST"
+      >
+        <% if (editing) { %>
+        <input type="hidden" name="_id" value="<%= home._id %>" />
+        <% } %>
+        <input
+          type="text"
+          name="HouseName"
+          placeholder="Enter the name of the house"
+          value="<%= editing && home ? home.HouseName : '' %>"
+        />
+        <input
+          type="number"
+          name="HouseNumber"
+          placeholder="Enter the house number"
+          required
+          value="<%= editing && home ? home.HouseNumber : '' %>"
+        />
+        <input
+          type="number"
+          name="Price"
+          placeholder="Enter the price in INR"
+          required
+          value="<%= editing && home ? home.Price : '' %>"
+        />
+        <input
+          type="number"
+          step="0.1"
+          placeholder="Enter the rating of the hotel room "
+          name="rating"
+          required
+          value="<%= editing && home ? home.rating : '' %>"
+        />
+        <input
+          type="text"
+          name="location"
+          placeholder="Enter the location"
+          required
+          value="<%= editing && home ? home.location : '' %>"
+        />
+        <input type="text"
+        name = "description"
+        placeholder = "Enter description about the home"
+        value = "<%= editing && home ? home.description : '' %>"
+        />
+        <div style="display: flex; align-items: center; gap: 10px">
+          <label for="HousePhoto">Upload Image</label>
+          <input type="file" name="HousePhoto" accept="image/*" />
+        </div>
+        <input
+          type="submit"
+          value="<%= editing ? 'Update Home' : 'Enroll Home' %>"
+        />
+      </form>
+    </div>
+  </body>
+</html>
