@@ -9,7 +9,7 @@ exports.gethome = (req, res, next) => {
   //got it from the hostRouter
 };
 exports.viewHome = (req, res, next) => {
-  if(!req.isloggedin){
+  if(!req.session.isloggedin){
     return res.redirect("/login");
   }
   Home.fetchAll()
@@ -32,7 +32,7 @@ exports.viewHome = (req, res, next) => {
     });
 };
 exports.getHomeDetails = (req, res, next) => {
-  if(!req.isloggedin){
+  if(!req.session.isloggedin){
     return res.redirect("/login");
   }
   const homeId = req.params.homeId;
@@ -55,7 +55,7 @@ exports.getHomeDetails = (req, res, next) => {
 };
 
 exports.getfavourites = (req, res, next) => {
-  if(!req.isloggedin){
+  if(!req.session.isloggedin){
     return res.redirect("/login");
   }
   Favourite.getFavourite()
@@ -73,7 +73,7 @@ exports.getfavourites = (req, res, next) => {
 };
 
 exports.postAddToFavourites = (req, res, next) => {
-  if(!req.isloggedin){
+  if(!req.session.isloggedin){
     return res.redirect("/login");
   }
   console.log(req.body);
@@ -94,7 +94,7 @@ exports.postAddToFavourites = (req, res, next) => {
 };
 
 exports.removeFavourites = (req, res, next) => {
-  if(!req.isloggedin){
+  if(!req.session.isloggedin){
     return res.redirect("/login");
   }
   // accept homeId either from body (form) or URL param
