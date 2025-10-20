@@ -1,7 +1,8 @@
 const { MongoClient } = require('mongodb');
 
 // Use environment variable if available, otherwise fall back to the hard-coded URI.
-// (In production, put credentials in env vars or a secrets manager.)
+// (In production, put credentials in env vars or a secrets manager.
+
 const Mongo_URL = process.env.MONGO_URL || "mongodb+srv://root:root@rohitsingh.oa2ul7f.mongodb.net/?retryWrites=true&w=majority&appName=RohitSingh";
 
 let _db;
