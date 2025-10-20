@@ -17,9 +17,7 @@ const MongoDBStore = require("connect-mongodb-session")(session);
 const app = express();
 app.set("view engine", "ejs");
 app.set("views", "views"); //explicitly set the folder where it is stored
-//views ke folder pe applicable hai
 
-// Serve static files from the 'public' directory
 app.use(express.static("public"));
 const store = new MongoDBStore({
   uri: DB_PATH, //uniform resource locator
@@ -28,33 +26,22 @@ const store = new MongoDBStore({
 
 app.use(
   session({
-    //secret session key is used to sign the session id cookie
     secret: "Rohit Singh session",
-    //forces session data to be saved back to the session store
     resave: false,
-    //forces a sessio uninitilised to be saved to the store
     saveUninitialized: true,
-    store: store, //iske andar store karna start kr dega
+    store: store
   })
 );
+
 app.use((req, res, next) => {
   req.isloggedin = req.session.isloggedin;
-
-  // expose to EJS templates so partials like navbar can read it
-  // res.locals.isloggedin = req.isloggedin;
-  // if(req.isloggedin == false ){
-  //   return res.redirect("/login");
-  // }
   res.locals.isloggedin = req.isloggedin;
   next();
 });
 app.use(express.urlencoded({ extended: true }));
-
 app.use(authRouter);
-
 app.use(express.json());
 app.use(userRouter);
-
 // protect /host routes: only allow when req.isloggedin is truthy
 app.use("/host", (req, res, next) => {
   if (req.isloggedin) return next();

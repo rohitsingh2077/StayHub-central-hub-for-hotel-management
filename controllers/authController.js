@@ -1,7 +1,9 @@
 exports.getlogin = (req,res,next)=>{
   console.log(`get login called`);
   // prefer the middleware-parsed value (available on req or res.locals)
-  res.render("auth/login" );
+  res.render("auth/login",{
+    isloggedin:false
+  });
 }
 exports.postlogin = (req,res,next)=>{
   console.log(req.body);
@@ -18,4 +20,16 @@ exports.postlogout = (req,res,next)=>{
   // res.cookie('isloggedin', 'false');
   req.session.isloggedin = false;
   res.redirect('/');
+}
+
+exports.getsignup = (req,res,next)=>{
+  res.render("auth/signup" ,{
+      isloggedin:false
+    }
+  );
+}
+
+exports.postsignup  =(req,res,next)=>{
+  console.log(req.body);
+  res.redirect('/login');
 }

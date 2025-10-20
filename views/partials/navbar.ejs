@@ -1,106 +1,132 @@
-<div id="navbar" style="
+<div
+  id="navbar"
+  style="
     display: flex;
-    gap: 2rem;
+    align-items: center;
+    justify-content: space-between;
     background: linear-gradient(90deg, #0bb011, #20e029);
     color: white;
-    width: 100%;
-    height: 60px;
-    align-items: center;
-    padding: 0 20px;
-    box-shadow: 0 4px 12px rgba(176, 143, 143, 0.1);
+    height: 64px;
+    padding: 0 2rem;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
     position: sticky;
     top: 0;
-    z-index: 100;
-">
-  <a href="/" style="
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-      font-size: 1rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-  ">Home</a>
-  <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
-  <a href="/host/add-home" style="
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-      font-size: 1rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-  ">Add Home</a>
+    z-index: 1000;
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+  "
+>
+  <!-- Left: Brand / Logo -->
+  <div style="display: flex; align-items: center; gap: 0.5rem;">
+    <span style="font-size: 1.5rem;">🏡</span>
+    <a
+      href="/"
+      style="
+        text-decoration: none;
+        color: white;
+        font-size: 1.4rem;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        transition: all 0.3s ease;
+      "
+      >fckhome</a
+    >
+  </div>
+
+  <!-- Center: Nav Links -->
+  <div style="display: flex; align-items: center; gap: 1.5rem;">
+    <a
+      href="/"
+      style="
+        text-decoration: none;
+        color: white;
+        font-weight: 500;
+        font-size: 1rem;
+        padding: 8px 14px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      "
+      onmouseover="this.style.background='rgba(255,255,255,0.15)'"
+      onmouseout="this.style.background='transparent'"
+      >Home</a
+    >
+    
+    <% if (isloggedin) { %>
+    <a href="/host/add-home" class="nav-link">Add Home </a>
+    <a href="/viewhome" class="nav-link">View Homes</a>
+    <a href="/bookings" class="nav-link">Bookings </a>
+    <a href="/favourites" class="nav-link">Favourites ❤️</a>
+    <a href="/host/hosthomes" class="nav-link">Host Homes</a>
     <% } %>
-  <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
-  <a href="/viewhome" style="
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-      font-size: 1rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-  ">View Home</a>
-  <%}%>
-    <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
-  <a href="/bookings" style="
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-      font-size: 1rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-  ">Bookings</a>
-    <% } %>
-    <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
-  <a href="/favourites" style="
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-      font-size: 1rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-  ">Favourites</a>
-  <%}%>
-    <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
-  <a href="/host/hosthomes" style="
-      text-decoration: none;
-      color: white;
-      font-weight: 500;
-      font-size: 1rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-  ">Host Homes</a>
-    <% } %>
-    <% if (typeof isloggedin !== 'undefined' && isloggedin) { %>
-    <a href="/logout" style="
-            text-decoration: none;
-            color: white;
-            background: linear-gradient(90deg, #98d21c, #bfda25);
-            font-weight: 500;
-            font-size: 1rem;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-            position: absolute;
-            right: 1rem;
-    ">Log out</a>
+  </div>
+
+  <!-- Right: Auth Buttons -->
+  <div style="display: flex; align-items: center; gap: 1rem;">
+    <% if (isloggedin) { %>
+    <a
+      href="/logout"
+      style="
+        text-decoration: none;
+        color: white;
+        background: linear-gradient(90deg, #98d21c, #bfda25);
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 8px 14px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      "
+      onmouseover="this.style.transform='scale(1.05)'"
+      onmouseout="this.style.transform='scale(1)'"
+      >🚪 Logout</a
+    >
     <% } else { %>
-    <a href="/login" style="
-      text-decoration: none;
-      color: white;
-      background: linear-gradient(90deg, #98d21c, #bfda25);
-      font-weight: 500;
-      font-size: 1rem;
-      padding: 8px 12px;
-      border-radius: 8px;
-      transition: all 0.3s ease;
-      position: absolute;
-      right: 1rem;
-  ">Log in</a>
+    <a
+      href="/login"
+      style="
+        text-decoration: none;
+        color: white;
+        background: linear-gradient(90deg, #ffb300, #ffc107);
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 8px 14px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      "
+      onmouseover="this.style.transform='scale(1.05)'"
+      onmouseout="this.style.transform='scale(1)'"
+      >🔐 Log In</a
+    >
+    <a
+      href="/signup"
+      style="
+        text-decoration: none;
+        color: white;
+        background: linear-gradient(90deg, #98d21c, #bfda25);
+        font-weight: 600;
+        font-size: 1rem;
+        padding: 8px 14px;
+        border-radius: 10px;
+        transition: all 0.3s ease;
+      "
+      onmouseover="this.style.transform='scale(1.05)'"
+      onmouseout="this.style.transform='scale(1)'"
+      >🌱 Sign Up</a
+    >
     <% } %>
+  </div>
 </div>
+
+<style>
+  .nav-link {
+    text-decoration: none;
+    color: white;
+    font-weight: 500;
+    font-size: 1rem;
+    padding: 8px 12px;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  .nav-link:hover {
+    background: rgba(255, 255, 255, 0.15);
+    transform: translateY(-2px);
+  }
+</style>
