@@ -2,7 +2,7 @@ const Favourite = require("../models/favourite");
 const Home = require("../models/home");
 
 exports.gethome = (req, res, next) => {
-  console.log(`info about session: `, req.session);
+  // console.log(`info about session: `, req.session);
   res.render("store/home-page" , {
     isloggedin :req.isloggedin
   });

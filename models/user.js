@@ -18,7 +18,7 @@ module.exports = class User {
           // Email exists → reject promise
           throw new Error("Email already registered");
         }
-
+        
         // Insert new user
         return db.execute(
           `INSERT INTO users (first_name, last_name, email, password, role)
@@ -33,5 +33,10 @@ module.exports = class User {
         console.error("❌ Error in User.save:", err.message);
         throw err;
       });
+  }
+  static find(email){
+    return db.execute(
+      "select * from users where email = ? " ,[email]
+    )
   }
 };

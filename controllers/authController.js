@@ -1,12 +1,12 @@
 const { check, body, validationResult } = require("express-validator");
 const { error } = require("./errorController");
 const User = require("../models/user");
-const bcrypt = require('bcryptjs');
+const bcrypt = require("bcryptjs");
+
 exports.getlogin = (req, res, next) => {
   console.log(`get login called`);
-  // prefer the middleware-parsed value (available on req or res.locals)
-  res.render("auth/login", {
-    isloggedin: false,
+  res.render("auth/login",{
+    oldInput: {}
   });
 };
 
@@ -15,8 +15,25 @@ exports.postlogin = (req, res, next) => {
   //logging in to be true
   // set cookie explicitly as string 'true' so server parsing is predictable
   // res.cookie('isloggedin', 'true');
-  req.session.isloggedin = true;
-  res.redirect("/");
+  // req.session.isloggedin = true;
+  const { email, password } = req.body;
+  User.find(email).then(([rows]) => {
+    console.log(email);
+    if (rows.length == 0) {
+      // User not found
+      console.log("user not found");
+      return res.status(422).render("auth/login", {
+        isloggedin: false,
+        oldInput: { email },
+        errors: ["Invalid email or password"],
+      });
+    } else {
+      //now check if password will match or not after encrypting
+      
+      res.redirect("/");
+    }
+  });
+  // prefer the middleware-parsed value (available on req or res.locals
 };
 
 exports.postlogout = (req, res, next) => {
@@ -32,7 +49,7 @@ exports.postsignup = [
   check("first_name")
     .trim()
     .isLength({ min: 2 })
-    .withMessage("At least 2 characters needed")
+    .withMessage("At least 2 characters needed in name")
     .matches(/^[A-Za-z\s]+$/)
     .withMessage("Only letters and spaces allowed"),
 
@@ -68,7 +85,6 @@ exports.postsignup = [
   (req, res, next) => {
     const errors = validationResult(req);
     // console.log(errors);
-    console.log(req.body);
     const { first_name, last_name, email, password, role } = req.body;
     //12 means 12 baar hashing hogi using algorithm
     bcrypt.hash(password, 12).then((hashedPassword) => {
@@ -102,10 +118,8 @@ exports.postsignup = [
     });
   },
 ];
-
 exports.getsignup = (req, res, next) => {
   oldInput = {}; //is bkl cheez ne dimag kharab kar diya
-  console.log(req.body);
   res.render("auth/signup", {
     oldInput: oldInput,
   });
