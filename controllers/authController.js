@@ -5,35 +5,65 @@ const bcrypt = require("bcryptjs");
 
 exports.getlogin = (req, res, next) => {
   console.log(`get login called`);
-  res.render("auth/login",{
-    oldInput: {}
+  res.render("auth/login", {
+    oldInput: {},
+    user: {},
   });
 };
 
 exports.postlogin = (req, res, next) => {
   console.log(req.body);
-  //logging in to be true
-  // set cookie explicitly as string 'true' so server parsing is predictable
-  // res.cookie('isloggedin', 'true');
-  // req.session.isloggedin = true;
   const { email, password } = req.body;
-  User.find(email).then(([rows]) => {
-    console.log(email);
-    if (rows.length == 0) {
-      // User not found
-      console.log("user not found");
-      return res.status(422).render("auth/login", {
-        isloggedin: false,
-        oldInput: { email },
-        errors: ["Invalid email or password"],
+
+  User.find(email)
+    .then(([rows]) => {
+      if (rows.length === 0) {
+        console.log("User not found");
+        return res.status(422).render("auth/login", {
+          isloggedin: false,
+          oldInput: { email },
+          errors: ["Invalid email or password"],
+          user: {},
+        });
+      }
+
+      // bcrypt.compare returns a Promise
+      return bcrypt.compare(password, rows[0].password).then((isMatch) => {
+        if (!isMatch) {
+          return res.status(422).render("auth/login", {
+            isloggedin: false,
+            oldInput: { email },
+            errors: ["Invalid password"],
+          });
+        }
+
+        // Login successful
+        console.log(`match found now logging in`);
+        req.session.isloggedin = true;
+        req.session.user = rows[0];
+        req.session.save((err) => {
+          if (err) {
+            console.error("Session save error:", err);
+            return res.status(500).render("auth/login", {
+              isloggedin: false,
+              oldInput: { email },
+              errors: ["Something went wrong, please try again later."],
+              user: {},
+            });
+          }
+          res.redirect("/");
+        });
       });
-    } else {
-      //now check if password will match or not after encrypting
-      
-      res.redirect("/");
-    }
-  });
-  // prefer the middleware-parsed value (available on req or res.locals
+    })
+    .catch((err) => {
+      console.error(err);
+      res.status(500).render("auth/login", {
+        isloggedin: false,
+        oldInput: {},
+        errors: ["Something went wrong, please try again later."],
+        user: {},
+      });
+    });
 };
 
 exports.postlogout = (req, res, next) => {
@@ -96,6 +126,7 @@ exports.postsignup = [
           errors: errors.array(),
           oldInput: req.body,
           errors: errors.array().map((err) => err.msg),
+          user: {},
         });
       } else {
         user
@@ -111,7 +142,8 @@ exports.postsignup = [
 
               isloggedin: false,
               oldInput: req.body,
-              errors: ["Email ID already registered"], // array for easy looping in EJS
+              errors: ["Email ID already registered"],
+              user: {}, // array for easy looping in EJS
             });
           });
       }
@@ -122,5 +154,6 @@ exports.getsignup = (req, res, next) => {
   oldInput = {}; //is bkl cheez ne dimag kharab kar diya
   res.render("auth/signup", {
     oldInput: oldInput,
+    user: {},
   });
 };

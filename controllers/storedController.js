@@ -3,15 +3,17 @@ const Home = require("../models/home");
 
 exports.gethome = (req, res, next) => {
   // console.log(`info about session: `, req.session);
-  res.render("store/home-page" , {
-    isloggedin :req.isloggedin
+  res.render("store/home-page", {
+    isloggedin: req.isloggedin,
+    user: req.session.user,
   });
   //got it from the hostRouter
 };
 exports.viewHome = (req, res, next) => {
-  if(!req.session.isloggedin){
+  if (!req.session.isloggedin) {
     return res.redirect("/login");
   }
+  console.log(req.session);
   Home.fetchAll()
     .then((regHome) => {
       console.log(
@@ -23,7 +25,8 @@ exports.viewHome = (req, res, next) => {
       console.log(req.isloggedin);
       res.render("store/viewHome", {
         regHome: regHome,
-        isloggedin: req.isloggedin
+        isloggedin: req.isloggedin,
+        user: req.session.user,
       });
     })
     .catch((err) => {
@@ -32,7 +35,7 @@ exports.viewHome = (req, res, next) => {
     });
 };
 exports.getHomeDetails = (req, res, next) => {
-  if(!req.session.isloggedin){
+  if (!req.session.isloggedin) {
     return res.redirect("/login");
   }
   const homeId = req.params.homeId;
@@ -45,7 +48,8 @@ exports.getHomeDetails = (req, res, next) => {
       }
       res.render("store/homedetail", {
         home: home,
-        isloggedin: req.isloggedin
+        isloggedin: req.isloggedin,
+        user: req.session.user,
       });
     })
     .catch((err) => {
@@ -55,15 +59,18 @@ exports.getHomeDetails = (req, res, next) => {
 };
 
 exports.getfavourites = (req, res, next) => {
-  if(!req.session.isloggedin){
+  if (!req.session.isloggedin) {
     return res.redirect("/login");
   }
-  Favourite.getFavourite()
+  console.log(req.session.user);
+  Favourite.getFavourite(req.session.user.id)
     .then((favList) => {
       // favList is expected to be an array of home documents
+      console.log(favList);
       res.render("store/favlist", {
         regHome: favList,
-        isloggedin: req.isloggedin
+        isloggedin: req.isloggedin,
+        user: req.session.user,
       });
     })
     .catch((err) => {
@@ -73,7 +80,7 @@ exports.getfavourites = (req, res, next) => {
 };
 
 exports.postAddToFavourites = (req, res, next) => {
-  if(!req.session.isloggedin){
+  if (!req.session.isloggedin) {
     return res.redirect("/login");
   }
   console.log(req.body);
@@ -81,24 +88,24 @@ exports.postAddToFavourites = (req, res, next) => {
     console.log("Body is missing or id is undefined");
     return res.status(400).send("No home ID received");
   }
-  Favourite.addToFavourite(req.body._id)
+  Favourite.addToFavourite(req.session.user.id, req.body._id)
     .then(() => {
-      console.log(`Something is done`);
+      console.log("Added to favourites");
+      res.redirect("/viewhome");
     })
     .catch((err) => {
-      console.log(`there was some error`, err);
-    })
-    .finally(() => {
-      res.redirect("/viewhome");
+      console.log("Error adding to favourites", err);
+      res.status(500).send("Something went wrong");
     });
 };
 
 exports.removeFavourites = (req, res, next) => {
-  if(!req.session.isloggedin){
+  if (!req.session.isloggedin) {
     return res.redirect("/login");
   }
   // accept homeId either from body (form) or URL param
   const homeId = req.body.homeId || req.params.homeId;
+
   console.log("Home id is:", homeId);
 
   if (!homeId) {
@@ -106,8 +113,8 @@ exports.removeFavourites = (req, res, next) => {
     return res.redirect("/favourites");
   }
 
-  Favourite.removeFavourites(homeId)
-    .then(() => res.redirect("/fa5vourites"))
+  Favourite.removeFavourites(req.session.user.id, homeId)
+    .then(() => res.redirect("/favourites"))
     .catch((err) => {
       console.error("Error removing favourite:", err);
       res.redirect("/favourites");

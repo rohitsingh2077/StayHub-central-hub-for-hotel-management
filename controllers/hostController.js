@@ -4,7 +4,8 @@ exports.getaddHome = (req, res, next) => {
   console.log(`home req sent`);
   res.render("host/edit-home", {
     editing: false,
-    isloggedin: req.isloggedin
+    isloggedin: req.isloggedin,
+    user :req.session.user
   });
 };
 
@@ -16,11 +17,12 @@ exports.postAddHome = (req, res, next) => {
     location,
     rating,
     description,
-    HousePhoto,
   } = req.body;
   const db = getDB();
 
   // Check if HouseNumber already exists in MongoDB
+  const host_id = req.session.user.id;
+  console.log(host_id);
   db.collection("homes")
     .findOne({ HouseNumber: HouseNumber })
     .then((existing) => {
@@ -35,15 +37,17 @@ exports.postAddHome = (req, res, next) => {
         location,
         rating,
         description,
-        null
+        null,
+        host_id
       );
-      home.save().then(() => {
+      home.save(host_id).then(() => {
         console.log(`home saved successfully`);
       });
     })
     .then(() => {
       res.render("host/Homeadded", {
-        isloggedin: req.isloggedin
+        isloggedin: req.isloggedin,
+        user :req.session.user
       });
     })
     .catch((err) => {
@@ -67,7 +71,8 @@ exports.postviewHome = (req, res, next) => {
       }
       res.render("store/viewHome", {
         regHome: regHome,
-        isloggedin: req.isloggedin
+        isloggedin: req.isloggedin,
+        user :req.session.user
       });
     })
     .catch((err) => {
@@ -78,25 +83,25 @@ exports.postviewHome = (req, res, next) => {
 
 exports.viewHostHome = (req, res, next) => {
   //returns a promise
+  //it should not fetch all the homes but only homes of host
   Home.fetchAll()
     .then((regHome) =>
       res.render("host/host-home-list", {
         regHome: regHome,
-        isloggedin: req.isloggedin
+        isloggedin: req.isloggedin,
+        user :req.session.user
       })
     )
     .catch((err) => res.status(500).send("Server error"));
 };
 
 exports.getHostHomes = (req, res, next) => {
-  Home.fetchAll()
-    .then((regHome) =>
-      res.render("host/host-home-list", {
-        regHome: regHome,
-        isloggedin: req.isloggedin
-      })
-    )
-    .catch((err) => res.status(500).send("Server error"));
+  //only the homes of the host must be called here otherwise to login page called
+  if(isloggedin && req.session.user.role === 'host'){
+      //now the functionalities here
+
+  }
+  
 };
 
 exports.getEditHome = (req, res, next) => {
@@ -116,6 +121,7 @@ exports.getEditHome = (req, res, next) => {
         editing: true,
         home: home,
         isloggedin: req.isloggedin,
+        user :req.session.user
       });
     })
     .catch((err) => {
