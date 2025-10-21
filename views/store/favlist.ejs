@@ -145,13 +145,13 @@
       <p>Here are our favourites homes:</p>
       <div class="home-cards">
         <% if(regHome && regHome.length > 0){%>
-        <pre><%= JSON.stringify(regHome, null, 10) %></pre>
+        <!-- <pre><%= JSON.stringify(regHome, null, 10) %></pre> -->
 
 
 
         
         <% regHome.forEach(home => { %>
-        <!-- <!-- <div class="card">
+        <div class="card">
           <img
             src="<%= home.photoUrl %>"
             alt="Image of <%= home.HouseName %>"
@@ -174,8 +174,8 @@
               Delete
             </button>
           </form>
-        </div> -->
-        <% })%> -->
+        </div>
+        <% })%>
         <%}%>
       </div>
     </div>
