@@ -150,7 +150,7 @@
         <% regHome.forEach(home => { %>
         <div class="card">
           <img
-            src="<%= home.photoUrl %>"
+            src="<%= home.Photo %>"
             alt="Image of <%= home.HouseName %>"
           />
           <h3><%= home.HouseName %> (#<%= home.HouseNumber %>)</h3>
@@ -167,6 +167,7 @@
               action="/host/delete-home/<%= home._id%>"
               id="<%= home._id%>"
               method="post"
+              enctype="multipart/form-data"
             >
               <input type="hidden" name="homeId" value="<%= home._id %>" />
               <button

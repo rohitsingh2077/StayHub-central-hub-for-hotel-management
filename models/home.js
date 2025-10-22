@@ -12,7 +12,8 @@ module.exports = class Home {
     rating,
     description,
     _id,
-    host_id
+    host_id,
+    Photo
   ) {
     this.HouseName = HouseName;
     this.HouseNumber = HouseNumber;
@@ -21,7 +22,8 @@ module.exports = class Home {
     this.rating = rating;
     this.description = description;
     if (_id) this._id = new ObjectId(_id);
-    this.host_id = host_id;
+    this.host_id = host_id
+    this.Photo = Photo;
   }
 
   save(host_id) {

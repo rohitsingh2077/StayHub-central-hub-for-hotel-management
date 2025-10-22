@@ -8,7 +8,7 @@ mongodb -> (session , home details)
 const Home = require("../models/home");
 const { getDB } = require("../utils/databseUtil");
 exports.getaddHome = (req, res, next) => {
-  console.log(`home req sent`);
+  console.log(`get add home called`);
   res.render("host/edit-home", {
     editing: false,
     isloggedin: req.isloggedin,
@@ -17,15 +17,30 @@ exports.getaddHome = (req, res, next) => {
 };
 
 exports.postAddHome = (req, res, next) => {
-  const { HouseName, HouseNumber, Price, location, rating, description } =
-    req.body;
+  console.log("req body" , req.body);
+  if(typeof req.body === 'undefined'){
+    return res.redirect("/");
+  }
+  const { HouseName, HouseNumber, Price, location, rating, description } = req.body;
   const db = getDB();
 
-  // Check if HouseNumber already exists in MongoDB
+  console.log('post add home called');
+  console.log('File uploaded:', req.file);
+
+  // Host ID from session
   const host_id = req.session.user.id;
-  console.log(host_id);
+  console.log('Host ID:', host_id);
+
+  if (!req.file) {
+    return res.status(400).send("No photo uploaded!");
+  }
+
+  // Save file path (depending on multer config)
+  const photoPath = req.file.path; // or req.file.filename if you store only names
+
+  // Check if HouseNumber already exists
   db.collection("homes")
-    .findOne({ HouseNumber: HouseNumber })
+    .findOne({ HouseNumber })
     .then((existing) => {
       if (existing) {
         return res.send("HouseNumber already exists!");
@@ -39,16 +54,18 @@ exports.postAddHome = (req, res, next) => {
         rating,
         description,
         null,
-        host_id
+        host_id,
+        photoPath
       );
-      home.save(host_id).then(() => {
-        console.log(`home saved successfully`);
-      });
-    })
-    .then(() => {
-      res.render("host/Homeadded", {
-        isloggedin: req.isloggedin,
-        user: req.session.user,
+
+      console.log('Home to save:', home);
+
+      return home.save(host_id).then(() => {
+        console.log(`Home saved successfully`);
+        res.render("host/Homeadded", {
+          isloggedin: req.isloggedin,
+          user: req.session.user,
+        });
       });
     })
     .catch((err) => {
@@ -57,33 +74,9 @@ exports.postAddHome = (req, res, next) => {
     });
 };
 
-exports.postviewHome = (req, res, next) => {
-  // for booking of home
-  Home.fetchAll()
-    .then((regHome) => {
-      const homeID = req.body.homeID;
-      const home = regHome.find((h) => h.HouseNumber == homeID);
-
-      if (home) {
-        console.log(`Booking Home: ${home.HouseName}`);
-        // mark or save booking if needed
-      } else {
-        console.log(`Home not found`);
-      }
-      res.render("store/viewHome", {
-        regHome: regHome,
-        isloggedin: req.isloggedin,
-        user: req.session.user,
-      });
-    })
-    .catch((err) => {
-      console.error("Error in postviewHome:", err);
-      res.status(500).send("Server error");
-    });
-};
-
 exports.getHostHomes = (req, res, next) => {
   //only the homes of the host must be called here otherwise to login page called
+  console.log('get host homes called');
   if (req.session.isloggedin && req.session.user.role === "host") {
     //now the functionalities here
     Home.fetchAllHostHomes(req.session.user.id)
@@ -126,7 +119,7 @@ exports.getEditHome = (req, res, next) => {
 
 // handle edit form submission
 exports.postEditHome = (req, res, next) => {
-  const { _id, HouseName, HouseNumber, Price, rating, location, description } =
+  const {HouseName, HouseNumber, Price, rating, location, description,_id } =
     req.body;
   const host_id = req.session.user.id;
   console.log(`id: ${_id}`);
@@ -160,9 +153,9 @@ exports.postDeleteHome = (req, res, next) => {
   console.log(`came to delete `, homeId);
   Home.deleteById(homeId)
     .then(() => {
-      res.redirect("/host/hosthomelist");
+      res.redirect("/host/hosthomes");
     })
     .catch(() => {
-      res.redirect("/host/hosthomelist");
+      res.redirect("/host/hosthomes");
     });
 };

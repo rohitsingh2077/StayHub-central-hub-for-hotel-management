@@ -12,7 +12,7 @@ exports.getlogin = (req, res, next) => {
 };
 
 exports.postlogin = (req, res, next) => {
-  console.log(req.body);
+  
   const { email, password } = req.body;
 
   User.find(email)

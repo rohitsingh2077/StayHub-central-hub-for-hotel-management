@@ -5,24 +5,31 @@ const DB_PATH = "mongodb+srv://root:root@rohitsingh.oa2ul7f.mongodb.net/airbnb?r
 
 const express = require("express");
 
+const multer = require('multer');
+const { mongoconnect } = require("./utils/databseUtil");
+const session = require("express-session");
+
 //LOCAL MODULE
 const userRouter = require("./routes/userRouter");
 const { hostRouter } = require("./routes/hostRouter");
 const errorController = require("./controllers/errorController");
-const { mongoconnect } = require("./utils/databseUtil");
 const authRouter = require("./routes/authRouter");
-const session = require("express-session");
+
 const MongoDBStore = require("connect-mongodb-session")(session);
 
 const app = express();
 app.set("view engine", "ejs");
 app.set("views", "views"); //explicitly set the folder where it is stored
 
-app.use(express.static("public"));
+
 const store = new MongoDBStore({
   uri: DB_PATH, //uniform resource locator
   collection: "sessions", // name of the collection in MongoDB
 });
+
+app.use(express.static("public"));
+app.use(express.json());
+app.use(express.urlencoded());
 
 app.use(
   session({
@@ -38,9 +45,13 @@ app.use((req, res, next) => {
   res.locals.isloggedin = req.isloggedin;
   next();
 });
-app.use(express.urlencoded({ extended: true }));
+
 app.use(authRouter);
-app.use(express.json());
+
+/*file handling middleware*/
+
+
+
 app.use(userRouter);
 // protect /host routes: only allow when req.isloggedin is truthy
 app.use("/host", (req, res, next) => {
