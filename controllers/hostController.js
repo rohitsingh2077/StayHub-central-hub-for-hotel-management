@@ -1,3 +1,10 @@
+/*
+I can store (host,home) in a seperate table in sql and then extract data from there...
+so 
+sql -> (host-home-list and favourites list and all users list)
+mongodb -> (session , home details)
+*/
+
 const Home = require("../models/home");
 const { getDB } = require("../utils/databseUtil");
 exports.getaddHome = (req, res, next) => {
@@ -5,19 +12,13 @@ exports.getaddHome = (req, res, next) => {
   res.render("host/edit-home", {
     editing: false,
     isloggedin: req.isloggedin,
-    user :req.session.user
+    user: req.session.user,
   });
 };
 
 exports.postAddHome = (req, res, next) => {
-  const {
-    HouseName,
-    HouseNumber,
-    Price,
-    location,
-    rating,
-    description,
-  } = req.body;
+  const { HouseName, HouseNumber, Price, location, rating, description } =
+    req.body;
   const db = getDB();
 
   // Check if HouseNumber already exists in MongoDB
@@ -47,7 +48,7 @@ exports.postAddHome = (req, res, next) => {
     .then(() => {
       res.render("host/Homeadded", {
         isloggedin: req.isloggedin,
-        user :req.session.user
+        user: req.session.user,
       });
     })
     .catch((err) => {
@@ -72,7 +73,7 @@ exports.postviewHome = (req, res, next) => {
       res.render("store/viewHome", {
         regHome: regHome,
         isloggedin: req.isloggedin,
-        user :req.session.user
+        user: req.session.user,
       });
     })
     .catch((err) => {
@@ -81,27 +82,20 @@ exports.postviewHome = (req, res, next) => {
     });
 };
 
-exports.viewHostHome = (req, res, next) => {
-  //returns a promise
-  //it should not fetch all the homes but only homes of host
-  Home.fetchAll()
-    .then((regHome) =>
-      res.render("host/host-home-list", {
-        regHome: regHome,
-        isloggedin: req.isloggedin,
-        user :req.session.user
-      })
-    )
-    .catch((err) => res.status(500).send("Server error"));
-};
-
 exports.getHostHomes = (req, res, next) => {
   //only the homes of the host must be called here otherwise to login page called
-  if(isloggedin && req.session.user.role === 'host'){
-      //now the functionalities here
-
+  if (req.session.isloggedin && req.session.user.role === "host") {
+    //now the functionalities here
+    Home.fetchAllHostHomes(req.session.user.id)
+      .then((regHome) =>
+        res.render("host/host-home-list", {
+          regHome: regHome,
+          isloggedin: req.session.isloggedin,
+          user: req.session.user,
+        })
+      )
+      .catch((err) => res.status(500).send("Server error"));
   }
-  
 };
 
 exports.getEditHome = (req, res, next) => {
@@ -121,7 +115,7 @@ exports.getEditHome = (req, res, next) => {
         editing: true,
         home: home,
         isloggedin: req.isloggedin,
-        user :req.session.user
+        user: req.session.user,
       });
     })
     .catch((err) => {
@@ -134,26 +128,35 @@ exports.getEditHome = (req, res, next) => {
 exports.postEditHome = (req, res, next) => {
   const { _id, HouseName, HouseNumber, Price, rating, location, description } =
     req.body;
+  const host_id = req.session.user.id;
   console.log(`id: ${_id}`);
   const updatedData = new Home(
     HouseName,
     HouseNumber,
     Price,
-    rating,
     location,
+    rating,
     description,
-    _id
+    _id,
+    host_id
   );
 
   console.log("this is the updated data", updatedData);
-  updatedData.save().then((result) => {
-    console.log(`hello`);
-  });
+  updatedData
+    .save(host_id)
+    .then((result) => {
+      console.log(`home edited successfully`);
+      res.redirect("/host/hosthomes");
+    })
+    .catch((err) => console.log(err));
   res.redirect("/host/hosthomes");
 };
 
 exports.postDeleteHome = (req, res, next) => {
   const homeId = req.params.homeId;
+  //now this is the tricky part
+  //kisi guest user ke favourties yaa fir booking hongi unko bhi hatana padega
+  //now how to delete bc from both sql and mongodb
   console.log(`came to delete `, homeId);
   Home.deleteById(homeId)
     .then(() => {

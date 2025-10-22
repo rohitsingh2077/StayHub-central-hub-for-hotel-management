@@ -142,7 +142,10 @@
     <%- include('../partials/navbar') %>
 
     <div id="content">
-      <p>Hey host here are your homes:</p>
+      <p>
+        Hey <%= user.first_name == 'Parth' ? 'LUND PARTH' : user.first_name %>
+        here are your homes:
+      </p>
       <div class="home-cards">
         <% regHome.forEach(home => { %>
         <div class="card">
@@ -160,8 +163,12 @@
               style="background-color: blue; padding: 2px"
               >Edit</a
             >
-            <form action="/host/delete-home/<%= home._id%>" id="<%= home._id%>" method="post">
-              <input type="hidden" name="homeId" value="<%= home._id %>">
+            <form
+              action="/host/delete-home/<%= home._id%>"
+              id="<%= home._id%>"
+              method="post"
+            >
+              <input type="hidden" name="homeId" value="<%= home._id %>" />
               <button
                 type="submit"
                 style="background-color: rgb(47, 171, 34); padding: 2px"
